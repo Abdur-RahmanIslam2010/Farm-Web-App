@@ -1,12 +1,63 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Livestocks</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
-</head>
-<body>
-    <h1>This is the Livestocks' Page</h1> 
-</body>
-</html>
+{% extends '../base.html' %}
+{% block title %}Livestock{% endblock %}
+{% block content %}
+    <h1 class="mt-5 livestock-title">Livestock</h1> 
+    <button class="btn btn-primary m-3 filter-button" onclick="showFilters()">Filters</button>
+    <form action="{% url 'stocks' %}" method="GET" class="filter-form d-flex flex-row gap-2 position-absolute bg-light p-4 rounded shadow" id="filter-form" inert>
+        <input type="text" name="q" placeholder="search animal..." value="{{ request.GET.q }}">
+        <select name="sale_status">
+            <option value="">All Animals</option>
+            <option value="1" {% if request.GET.sale_status == '1' %}selected{% endif %}>Ready for Sale</option>
+            <option value="0" {% if request.GET.sale_status == '0' %}selected{% endif %}>Too young to sell</option>
+        </select>
+
+        <button type="submit" class="btn btn-primary">Apply Filters</button>
+        <a href="{% url 'stocks' %}" class="fs-5">Reset Filters</a>
+    </form>
+    <div class="overflow-auto table-container">
+        <table class="table rounded border-1">
+            <thead>
+                <tr>
+                    <th class="p-3 bg-dark text-white">ID</th>
+                    <th class="p-3 bg-dark text-white">Animal Species</th>
+                    <th class="p-3 bg-dark text-white">Weight (kg.)</th>
+                    <th class="p-3 bg-dark text-white">Age (months)</th>
+                    <th class="p-3 bg-dark text-white">Price Factor ($/kg)</th>
+                    <th class="p-3 bg-dark text-white">Ready for Sale</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for head in heads %}
+                    <tr>
+                        <td class="p-3 border-1">{{ head.id }}</td>
+                        <td class="p-3 border-1">{{ head.animal }}</td>
+                        <td class="p-3 border-1">{{ head.weight }}</td>
+                        <td class="p-3 border-1">{{ head.age }}</td>
+                        <td class="p-3 border-1">{{ head.price_per_kilo }}</td>
+                        <td class="p-3 border-1">
+                            {% if head.ready_for_sale %}
+                                <span class="badge-success">Ready for Sale</span>
+                            {% else %}
+                                <span class="badge-secondary">Underage</span>
+                            {% endif %}
+                        </td>
+                    </tr>
+                    {% empty %}
+                        <tr><td colspan="6">No animals found matching your filter.</td></tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    <script>
+        function showFilters() {
+            const form = document.getElementById('filter-form');
+            if (form.style.opacity == 0) {
+                form.style.opacity = 1;
+                form.toggleAttribute('inert');
+            } else {
+                form.style.opacity = 0;
+                form.toggleAttribute('inert');
+            }
+        }
+    </script>
+{% endblock %}
