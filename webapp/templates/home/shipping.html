@@ -1,2 +1,33 @@
 {% extends '../base.html' %}
 {% block title %}Shipping{% endblock %}
+{% block content %}
+    <h1 class="mt-5">Your Shippings</h1>
+    <div class="shipping-table-container overflow-auto rounded-3">
+        <table class="table rounded-3 border-1">
+            <thead>
+                <tr>
+                    <th class="p-3 bg-dark text-white">Order ID</th>
+                    <th class="p-3 bg-dark text-white">Animal</th>
+                    <th class="p-3 bg-dark text-white">Animal ID</th>
+                    <th class="p-3 bg-dark text-white">Total Price</th>
+                    <th class="p-3 bg-dark text-white">Order Date</th>
+                    <th class="p-3 bg-dark text-white">Estimated Arrival</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for order in orders %}
+                    <tr>
+                        <td class="p-3 border-1">{{ order.id }}</td>
+                        <td class="p-3 border-1">{{ order.animal }}</td>
+                        <td class="p-3 border-1">{{ order.animal_id }}</td>
+                        <td class="p-3 border-1">{{ order.total_price }}</td>
+                        <td class="p-3 border-1">{{ order.order_date }}</td>
+                        <td class="p-3 border-1">{{ order.expected_arrival_date }}</td>
+                    </tr>
+                    {% empty %}
+                    <tr><td colspan="6" class="text-center">No Orders on the way</td></tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+{% endblock %}

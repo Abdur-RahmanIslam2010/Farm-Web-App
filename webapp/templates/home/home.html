@@ -1,10 +1,9 @@
 {% extends '../base.html' %}
 {% block title %}Home Page{% endblock %}
 {% block content %}
-    <h1 class="welcome-user-msg">Welcome, {{ username }}</h1>
+    <h1 class="welcome-user-msg mt-1">Welcome, {{ username }}</h1>
     <h3 class="user-status">{% if user.is_superuser %}<span class="admin-tag">Admin</span>{% elif user.is_staff %}Staff Member{% endif %}</h3>
-    {% if not user.is_superuser and not user.is_staff %}
-        <div class="card-container d-flex flex-row gap-3">
+        <div class="card-container d-flex flex-column flex-md-row gap-3">
             <div class="card shadow-lg">
                 <img src="../../../static/images/cow.jpeg" alt="Cow Image" class="card-img-top" width="330" height="220">
                 <div class="card-body">
@@ -40,19 +39,21 @@
         </div>
         
         <div class="shippings card mt-4 border-0">
-            <div class="card-head p-2 bg-primary text-white m-0 rounded">
+            <div class="card-head p-2 bg-primary text-white m-0 rounded d-flex flex-row">
                <span>Your orders</span>
+               <a href="{% url 'shipping' %}" class="text-white ms-auto">See more..</a>
             </div>
-            <div class="class-body d-flex flex-row p-5 gap-3">
-              <div class="card p-5 d-flex flex-column justify-content-center align-items-center"><svg xmlns="http://www.w3.org/2000/svg" height="48px" viewBox="0 -960 960 960" width="48px" fill="#e3e3e3"><path d="M453-280h60v-240h-60v240Zm26.98-314q14.02 0 23.52-9.2T513-626q0-14.45-9.48-24.22-9.48-9.78-23.5-9.78t-23.52 9.78Q447-640.45 447-626q0 13.6 9.48 22.8 9.48 9.2 23.5 9.2Zm.29 514q-82.74 0-155.5-31.5Q252-143 197.5-197.5t-86-127.34Q80-397.68 80-480.5t31.5-155.66Q143-709 197.5-763t127.34-85.5Q397.68-880 480.5-880t155.66 31.5Q709-817 763-763t85.5 127Q880-563 880-480.27q0 82.74-31.5 155.5Q817-252 763-197.68q-54 54.31-127 86Q563-80 480.27-80Zm.23-60Q622-140 721-239.5t99-241Q820-622 721.19-721T480-820q-141 0-240.5 98.81T140-480q0 141 99.5 240.5t241 99.5Zm-.5-340Z"/></svg>No orders at the moment</div>
-              <div class="card p-5 d-flex flex-column justify-content-center align-items-center"><svg xmlns="http://www.w3.org/2000/svg" height="48px" viewBox="0 -960 960 960" width="48px" fill="#e3e3e3"><path d="M453-280h60v-240h-60v240Zm26.98-314q14.02 0 23.52-9.2T513-626q0-14.45-9.48-24.22-9.48-9.78-23.5-9.78t-23.52 9.78Q447-640.45 447-626q0 13.6 9.48 22.8 9.48 9.2 23.5 9.2Zm.29 514q-82.74 0-155.5-31.5Q252-143 197.5-197.5t-86-127.34Q80-397.68 80-480.5t31.5-155.66Q143-709 197.5-763t127.34-85.5Q397.68-880 480.5-880t155.66 31.5Q709-817 763-763t85.5 127Q880-563 880-480.27q0 82.74-31.5 155.5Q817-252 763-197.68q-54 54.31-127 86Q563-80 480.27-80Zm.23-60Q622-140 721-239.5t99-241Q820-622 721.19-721T480-820q-141 0-240.5 98.81T140-480q0 141 99.5 240.5t241 99.5Zm-.5-340Z"/></svg>No orders at the moment</div>
-              <div class="card p-5 d-flex flex-column justify-content-center align-items-center"><svg xmlns="http://www.w3.org/2000/svg" height="48px" viewBox="0 -960 960 960" width="48px" fill="#e3e3e3"><path d="M453-280h60v-240h-60v240Zm26.98-314q14.02 0 23.52-9.2T513-626q0-14.45-9.48-24.22-9.48-9.78-23.5-9.78t-23.52 9.78Q447-640.45 447-626q0 13.6 9.48 22.8 9.48 9.2 23.5 9.2Zm.29 514q-82.74 0-155.5-31.5Q252-143 197.5-197.5t-86-127.34Q80-397.68 80-480.5t31.5-155.66Q143-709 197.5-763t127.34-85.5Q397.68-880 480.5-880t155.66 31.5Q709-817 763-763t85.5 127Q880-563 880-480.27q0 82.74-31.5 155.5Q817-252 763-197.68q-54 54.31-127 86Q563-80 480.27-80Zm.23-60Q622-140 721-239.5t99-241Q820-622 721.19-721T480-820q-141 0-240.5 98.81T140-480q0 141 99.5 240.5t241 99.5Zm-.5-340Z"/></svg>No orders at the moment</div>
-              <div class="card p-5 d-flex flex-column justify-content-center align-items-center"><svg xmlns="http://www.w3.org/2000/svg" height="48px" viewBox="0 -960 960 960" width="48px" fill="#e3e3e3"><path d="M453-280h60v-240h-60v240Zm26.98-314q14.02 0 23.52-9.2T513-626q0-14.45-9.48-24.22-9.48-9.78-23.5-9.78t-23.52 9.78Q447-640.45 447-626q0 13.6 9.48 22.8 9.48 9.2 23.5 9.2Zm.29 514q-82.74 0-155.5-31.5Q252-143 197.5-197.5t-86-127.34Q80-397.68 80-480.5t31.5-155.66Q143-709 197.5-763t127.34-85.5Q397.68-880 480.5-880t155.66 31.5Q709-817 763-763t85.5 127Q880-563 880-480.27q0 82.74-31.5 155.5Q817-252 763-197.68q-54 54.31-127 86Q563-80 480.27-80Zm.23-60Q622-140 721-239.5t99-241Q820-622 721.19-721T480-820q-141 0-240.5 98.81T140-480q0 141 99.5 240.5t241 99.5Zm-.5-340Z"/></svg>No orders at the moment</div>  
+            <div class="class-body d-flex flex-md-row flex-column p-4 gap-3">
+                {% for order in orders %}
+                    <div class="card p-5 d-flex flex-column justify-content-center align-items-center">
+                        <span>Order ID: {{ order.pk }}</span>
+                        <span>{{ order.animal }} Order</span>
+                        <span>${{ order.total_price }}</span>
+                        <span>{{ status }}</span>
+                    </div>
+                    {% empty %}
+                        No Orders
+                {% endfor %}
             </div>
         </div>
-    {% elif not user.is_superuser and user.is_staff %}
-        <div class="card p-4">hello peasant, this is a div</div>
-    {% else %}
-        <div class="card p-4">Hello, your majesty</div>
-    {% endif %}
 {% endblock %}

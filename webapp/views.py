@@ -4,13 +4,27 @@ from django.views.decorators.cache import never_cache
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login, logout
 from .forms import RegisterForm
-from .models import Head
+from .models import Head, Order
+from django.db import transaction
+from datetime import date
 
 # Create your views here.
 @login_required
 def home_view(request):
     username = request.user.get_username()
-    return render(request, 'home/home.html', {'username': username, 'user': request.user})
+    orders = Order.objects.filter(user=request.user)[:4]
+    today = date.today()
+    status = ''
+
+    for order in orders:
+        days_until = (order.expected_arrival_date - today).days
+
+        if days_until < 0:
+            status = "Arrived"
+        else:
+            status = f"Arriving in {days_until} days"
+
+    return render(request, 'home/home.html', {'username': username, 'user': request.user, "orders": orders, "status": status})
 
 def login_view(request):
     if request.method == "POST":
@@ -40,6 +54,21 @@ def stocks_view(request):
     elif sale_status == '0':
         heads = heads.filter(ready_for_sale=False)
 
+    if request.method == "POST":
+        selected_ids = request.POST.getlist('selected_records')
+
+        with transaction.atomic():
+            records = Head.objects.filter(id__in=selected_ids)
+
+            for record in records:
+                Order.objects.create(
+                    animal=record.animal,
+                    animal_id=record.pk,
+                    total_price=(record.price_per_kilo * record.weight),
+                    user=request.user,
+                )
+            records.delete()
+
     return render(request, 'home/stocks.html', {"heads": heads})
 
 def logout_view(request):
@@ -64,7 +93,8 @@ def register_view(request):
 
 @login_required
 def shipping_view(request):
-    return render(request, 'home/shipping.html')
+    all_orders = Order.objects.filter(user=request.user)
+    return render(request, 'home/shipping.html', {'orders': all_orders})
 
 def about_view(request):
     return render(request, 'home/about.html')    

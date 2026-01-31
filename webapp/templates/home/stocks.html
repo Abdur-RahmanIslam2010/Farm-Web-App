@@ -3,7 +3,7 @@
 {% block content %}
     <h1 class="mt-5 livestock-title">Livestock</h1> 
     <button class="btn btn-primary m-3 filter-button" onclick="showFilters()">Filters</button>
-    <form action="{% url 'stocks' %}" method="GET" class="filter-form d-flex flex-row gap-2 position-absolute bg-light p-4 rounded shadow" id="filter-form" inert>
+    <form action="{% url 'stocks' %}" method="GET" class="filter-form d-flex flex-md-row gap-2 position-absolute bg-light p-4 rounded shadow" id="filter-form" inert>
         <input type="text" name="q" placeholder="search animal..." value="{{ request.GET.q }}">
         <select name="sale_status">
             <option value="">All Animals</option>
@@ -14,41 +14,57 @@
         <button type="submit" class="btn btn-primary">Apply Filters</button>
         <a href="{% url 'stocks' %}" class="fs-5">Reset Filters</a>
     </form>
-    <div class="overflow-auto table-container">
-        <table class="table rounded border-1">
-            <thead>
-                <tr>
-                    <th class="p-3 bg-dark text-white">ID</th>
-                    <th class="p-3 bg-dark text-white">Animal Species</th>
-                    <th class="p-3 bg-dark text-white">Weight (kg.)</th>
-                    <th class="p-3 bg-dark text-white">Age (months)</th>
-                    <th class="p-3 bg-dark text-white">Price Factor ($/kg)</th>
-                    <th class="p-3 bg-dark text-white">Ready for Sale</th>
-                </tr>
-            </thead>
-            <tbody>
-                {% for head in heads %}
+    <form action="{% url 'stocks' %}" method="POST" class="purchase-form overflow-auto d-flex flex-column">
+        {% csrf_token %}
+        <button type="submit" id="buy-button" class="btn btn-success ms-auto me-auto mb-1">Purchase Livestock</button>
+        <div class="overflow-auto table-container rounded-3">
+            <table class="table rounded-3 border-1">
+                <thead>
                     <tr>
-                        <td class="p-3 border-1">{{ head.id }}</td>
-                        <td class="p-3 border-1">{{ head.animal }}</td>
-                        <td class="p-3 border-1">{{ head.weight }}</td>
-                        <td class="p-3 border-1">{{ head.age }}</td>
-                        <td class="p-3 border-1">{{ head.price_per_kilo }}</td>
-                        <td class="p-3 border-1">
-                            {% if head.ready_for_sale %}
-                                <span class="badge-success">Ready for Sale</span>
-                            {% else %}
-                                <span class="badge-secondary">Underage</span>
-                            {% endif %}
-                        </td>
+                        <th class="p-3 bg-dark text-white">Selected</th>
+                        <th class="p-3 bg-dark text-white">ID</th>
+                        <th class="p-3 bg-dark text-white">Animal Species</th>
+                        <th class="p-3 bg-dark text-white">Weight (kg.)</th>
+                        <th class="p-3 bg-dark text-white">Age (months)</th>
+                        <th class="p-3 bg-dark text-white">Price Factor ($/kg)</th>
+                        <th class="p-3 bg-dark text-white">Ready for Sale</th>
                     </tr>
-                    {% empty %}
-                        <tr><td colspan="6">No animals found matching your filter.</td></tr>
-                {% endfor %}
-            </tbody>
-        </table>
-    </div>
+                </thead>
+                <tbody>
+                    {% for head in heads %}
+                        <tr>
+                            <td class="p-3 border-1"><input type="checkbox" name="selected_records" value="{{ head.id }}"></td>
+                            <td class="p-3 border-1">{{ head.id }}</td>
+                            <td class="p-3 border-1">{{ head.animal }}</td>
+                            <td class="p-3 border-1">{{ head.weight }}</td>
+                            <td class="p-3 border-1">{{ head.age }}</td>
+                            <td class="p-3 border-1">{{ head.price_per_kilo }}</td>
+                            <td class="p-3 border-1">
+                                {% if head.ready_for_sale %}
+                                    <span class="badge-success">Ready for Sale</span>
+                                {% else %}
+                                    <span class="badge-secondary">Underage</span>
+                                {% endif %}
+                            </td>
+                        </tr>
+                        {% empty %}
+                            <tr><td colspan="7">No animals found matching your filter.</td></tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </form>
     <script>
+        const buyBtn = document.getElementById('buy-button');
+        buyBtn.disabled = true;
+
+        document.querySelectorAll('input[type="checkbox"]').forEach(cb => {
+            cb.addEventListener('change', () => {
+                const anyChecked = document.querySelectorAll('input[name="selected_records"]:checked').length > 0;
+                buyBtn.disabled = !anyChecked;
+            });
+        });
+
         function showFilters() {
             const form = document.getElementById('filter-form');
             if (form.style.opacity == 0) {
