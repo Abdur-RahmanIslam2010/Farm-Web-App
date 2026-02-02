@@ -13,6 +13,7 @@ What appears from my skillset in computer programming are the following:
 * Website Designing
 * Responsive and flexible structure to fit on all devices
 * Backend server and templating
+* User Authentication & and Authorization
 * Self-hosting on a local machine & unit service files on Linux machines
 * Using hosting services like Cloudflare
 * MVT-based full stack development
