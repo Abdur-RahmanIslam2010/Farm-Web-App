@@ -30,4 +30,4 @@ What appears from my skillset in computer programming are the following:
 This project exhibits my handling of customer's request, as well as adding unique features that they have asked for. I also know how to choose what tools and frameworks I should use to work efficiently, quickly, and effortlessly. This website is an example, as I knew what web framework I should work with when my father told me about this project, as well as what could make the project much easier like using Bootstrap for styling and responsive design.
 
 
-Link to check out the website: (https://carefully-significant-cord-dark.trycloudflare.com)[https://carefully-significant-cord-dark.trycloudflare.com]
+Link to check out the website: [https://carefully-significant-cord-dark.trycloudflare.com](https://carefully-significant-cord-dark.trycloudflare.com)
